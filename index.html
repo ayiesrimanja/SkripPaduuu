@@ -1,0 +1,438 @@
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkripViral AI — Next-Gen Affiliate Engine</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #a855f7, #3b82f6);
+            --accent-glow: rgba(168, 85, 247, 0.4);
+            --bg-main: #070709;
+            --card-bg: #111116;
+            --border-color: #22222d;
+            --border-active: #a855f7;
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 16px;
+        }
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+        }
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            background: linear-gradient(90deg, rgba(168,85,247,0.1), rgba(59,130,246,0.1));
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 0;
+            margin-bottom: 20px;
+            white-space: nowrap;
+        }
+        .ticker-move {
+            display: inline-block;
+            animation: ticker 25s linear infinite;
+            font-size: 0.8rem;
+            color: #c084fc;
+            font-weight: 600;
+        }
+        @keyframes ticker {
+            0% { transform: translate3d(100%, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .app-logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.5px;
+        }
+        .logo-icon {
+            background: var(--primary-gradient);
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.1rem;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+        .hero-box {
+            background: linear-gradient(180deg, #13131a 0%, #0d0d12 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+        .hero-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+        .hero-title span {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-desc {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 0.73rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .upload-box {
+            border: 2px dashed #2e2e3e;
+            padding: 20px 16px;
+            text-align: center;
+            border-radius: 14px;
+            background: #16161f;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 20px;
+        }
+        .upload-box:hover {
+            border-color: #a855f7;
+            background: #1a1a26;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .opt-btn {
+            padding: 12px 10px;
+            border: 1px solid var(--border-color);
+            background: #15151c;
+            color: var(--text-muted);
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .opt-btn span {
+            font-size: 0.92rem;
+            color: #cbd5e1;
+        }
+        .opt-btn.active {
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.12);
+            color: #c084fc;
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.15);
+        }
+        .opt-btn.active span {
+            color: #fff;
+        }
+        #threadSettings {
+            display: none;
+            background: rgba(168, 85, 247, 0.05);
+            border: 1px dashed rgba(168, 85, 247, 0.3);
+            padding: 14px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+        }
+        .generate-btn {
+            width: 100%;
+            background: var(--primary-gradient);
+            color: #fff;
+            font-weight: 800;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 6px 25px rgba(168, 85, 247, 0.4);
+            text-align: center;
+            transition: transform 0.1s;
+        }
+        .generate-btn:active {
+            transform: scale(0.98);
+        }
+        .result-container {
+            display: none;
+            margin-top: 20px;
+        }
+        .post-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 18px;
+            border-radius: 14px;
+            margin-bottom: 14px;
+        }
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+            color: #c084fc;
+            font-weight: 700;
+        }
+        .copy-btn {
+            background: #272735;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover {
+            background: #3f3f56;
+        }
+        .post-content {
+            white-space: pre-wrap;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Running Ticker Motivasi -->
+        <div class="ticker-wrap">
+            <div class="ticker-move">
+                ⚡ "Kejayaan tidak datang kepada yang menunggu, tapi kepada yang pantas bertindak!" &nbsp;&nbsp;&nbsp;&nbsp; 🔥 Konsisten hasilkan konten, komisen lumayan menanti hari ni! &nbsp;&nbsp;&nbsp;&nbsp; 🚀 Letopskan sales affiliate anda dengan AI terpantas!
+            </div>
+        </div>
+        <div class="app-header">
+            <div class="app-logo">
+                <div class="logo-icon">⚡</div> SkripViral AI
+            </div>
+        </div>
+        <div class="hero-box">
+            <h1 class="hero-title">Automate Your <span>Viral Empire</span></h1>
+            <p class="hero-desc">Muat naik produk, pilih platform, biarkan AI bina skrip pukau penonton dalam saat.</p>
+            
+            <span class="section-title">1. Pilih Produk (Screenshot)</span>
+            <div class="upload-box" onclick="document.getElementById('productImage').click()">
+                📂 <span id="fileNameText" style="color: var(--text-muted); font-size: 0.85rem;">Tekan sini untuk upload gambar barang</span>
+                <input type="file" id="productImage" accept="image/*" style="display: none;" onchange="previewFileName()">
+            </div>
+            <span class="section-title">2. Pilih Platform</span>
+            <div class="grid-3">
+                <div class="opt-btn active" onclick="setPlatform('TikTok', this)">🎬 <span>TikTok</span></div>
+                <div class="opt-btn" onclick="setPlatform('Threads', this)">🧵 <span>Threads</span></div>
+                <div class="opt-btn" onclick="setPlatform('Facebook', this)">👥 <span>Facebook</span></div>
+            </div>
+            <!-- Thread Chain Length -->
+            <div id="threadSettings">
+                <span class="section-title" style="color: #c084fc;">Thread Chain Length</span>
+                <div class="grid-2">
+                    <div class="opt-btn active" onclick="setOption('threadLength', '1 post (Single)', this)">📌 <span>1 post</span> <small style="color:var(--text-muted)">Single</small></div>
+                    <div class="opt-btn" onclick="setOption('threadLength', '3 posts (Triple-fold)', this)">🧵 <span>3 posts</span> <small style="color:var(--text-muted)">Triple-fold</small></div>
+                    <div class="opt-btn" onclick="setOption('threadLength', '5 posts (Extended)', this)">📑 <span>5 posts</span> <small style="color:var(--text-muted)">Extended</small></div>
+                    <div class="opt-btn" onclick="setOption('threadLength', '10 posts (Deep chain)', this)">🚀 <span>10 posts</span> <small style="color:var(--text-muted)">Deep chain</small></div>
+                </div>
+            </div>
+            <span class="section-title">3. Bahasa Skrip</span>
+            <div class="grid-2">
+                <div class="opt-btn active" onclick="setOption('lang', 'Bahasa Melayu', this)">🇲🇾 <span>Melayu</span></div>
+                <div class="opt-btn" onclick="setOption('lang', 'English', this)">🇬🇧 <span>English</span></div>
+            </div>
+            <span class="section-title">4. Strategi & Gaya Pemasaran</span>
+            <div class="grid-2">
+                <div class="opt-btn active" onclick="setOption('mood', 'Pemecah Minda (Shocking Hook)', this)">💥 <span>Pemecah Minda</span></div>
+                <div class="opt-btn" onclick="setOption('mood', 'Kisah Hidup (Storytelling)', this)">📖 <span>Kisah Hidup</span></div>
+                <div class="opt-btn" onclick="setOption('mood', 'Ulasan Jujur (Honest Review)', this)">⭐ <span>Ulasan Jujur</span></div>
+                <div class="opt-btn" onclick="setOption('mood', 'Penyelesaian Masalah (Problem Solver)', this)">🛠️ <span>Penyelesaian Masalah</span></div>
+                <div class="opt-btn" onclick="setOption('mood', 'Desakan Segera (FOMO & Urgency)', this)">⏰ <span>Desakan Segera</span></div>
+                <div class="opt-btn" onclick="setOption('mood', 'Tip & Didikan (Educational Value)', this)">💡 <span>Tip & Didikan</span></div>
+            </div>
+            
+            <button class="generate-btn" onclick="generateViralScript()">✨ Generate Viral Script</button>
+        </div>
+        <div id="resultContainer" class="result-container">
+            <span class="section-title" style="color: #c084fc; font-size: 0.9rem;">✨ Hasil Skrip AI</span>
+            <div id="postsOutput"></div>
+        </div>
+    </div>
+    <script>
+        const GEMINI_API_KEY = "AIzaSyD-Your-Key-Placeholder"; // Ganti dengan key yang sah jika perlu
+        
+        let selectedPlatform = 'TikTok';
+        let selectedThreadLength = '1 post (Single)';
+        let selectedLang = 'Bahasa Melayu';
+        let selectedMood = 'Pemecah Minda (Shocking Hook)';
+        function setPlatform(value, element) {
+            const parent = element.parentElement;
+            parent.querySelectorAll('.opt-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            
+            selectedPlatform = value;
+            const threadSettings = document.getElementById('threadSettings');
+            
+            if(value === 'Threads') {
+                threadSettings.style.display = 'block';
+            } else {
+                threadSettings.style.display = 'none';
+            }
+        }
+        function setOption(type, value, element) {
+            const parent = element.parentElement;
+            parent.querySelectorAll('.opt-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            
+            if(type === 'threadLength') selectedThreadLength = value;
+            if(type === 'lang') selectedLang = value;
+            if(type === 'mood') selectedMood = value;
+        }
+        function previewFileName() {
+            const input = document.getElementById('productImage');
+            const textSpan = document.getElementById('fileNameText');
+            if(input.files && input.files[0]) {
+                textSpan.style.color = '#c084fc';
+                textSpan.innerText = "Fail dipilih: " + input.files[0].name;
+            }
+        }
+        function convertImageToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        const dataURL = canvas.toDataURL('image/jpeg', 0.85);
+                        resolve(dataURL.split(',')[1]);
+                    };
+                    img.onerror = err => reject(err);
+                    img.src = event.target.result;
+                };
+                reader.onerror = err => reject(err);
+                reader.readAsDataURL(file);
+            });
+        }
+        async function generateViralScript() {
+            const imageInput = document.getElementById('productImage');
+            const resultContainer = document.getElementById('resultContainer');
+            const postsOutput = document.getElementById('postsOutput');
+            if(!imageInput.files || imageInput.files.length === 0) {
+                alert('Sila upload screenshot gambar produk dulu bro!');
+                return;
+            }
+            resultContainer.style.display = 'block';
+            postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="text-align:center; color: #c084fc;">⏳ Sedang menjana skrip mengikut gaya ${selectedMood}... (~7 saat)</div></div>`;
+            try {
+                const base64Data = await convertImageToBase64(imageInput.files[0]);
+                let platformDetail = selectedPlatform;
+                if(selectedPlatform === 'Threads') {
+                    platformDetail = `Threads (panjang rantai post: ${selectedThreadLength})`;
+                }
+                let moodInstruction = "";
+                if(selectedMood.includes('Pemecah Minda')) {
+                    moodInstruction = "Gunakan teknik Shocking Hook (Ayat kontroversi ringan, terkejut, atau soalan provokasi di awal ayat untuk hentikan penonton dari skrol).";
+                } else if(selectedMood.includes('Kisah Hidup')) {
+                    moodInstruction = "Gunakan teknik Storytelling emosi (Mulakan dengan kisah benar, pengalaman peribadi, atau cerita masalah harian yang dekat dengan penonton).";
+                } else if(selectedMood.includes('Ulasan Jujur')) {
+                    moodInstruction = "Gunakan gaya Honest Review (Tampil sebagai pengguna biasa yang menceritakan kelebihan sebenar produk tanpa nampak terlalu menjual).";
+                } else if(selectedMood.includes('Penyelesaian Masalah')) {
+                    moodInstruction = "Gunakan teknik Problem-Solver (Fokus terus kepada masalah ketara pengguna dan tunjukkan bagaimana produk ini selesaikannya dengan pantas).";
+                } else if(selectedMood.includes('Desakan Segera')) {
+                    moodInstruction = "Gunakan teknik FOMO & Urgency (Tekankan promosi terhad, stok cepat habis, dan kerugian kalau lambat beli sekarang).";
+                } else {
+                    moodInstruction = "Gunakan teknik Educational Value (Berikan tips berguna atau info tersembunyi yang membuatkan penonton rasa teruja dan simpan video).";
+                }
+                let promptInstruction = `Bertindak sebagai pakar copywriter affiliate bertaraf dunia. Berdasarkan gambar produk yang dilampirkan, kenal pasti jenis produk itu dan hasilkan skrip pemasaran eksklusif untuk platform ${platformDetail} dalam bahasa ${selectedLang}. 
+                
+PENTING - STRATEGI PEMASARAN: ${moodInstruction}
+Sediakan skrip yang berkesan tinggi, lengkap dengan struktur ayat yang memukau dan ruang untuk letak pautan affiliate di hujung ayat.`;
+                // Menggunakan endpoint standard v1 dengan parameter key di URL query string untuk elak ralat auth header
+                const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                { text: promptInstruction },
+                                {
+                                    inline_data: {
+                                        mime_type: "image/jpeg",
+                                        data: base64Data
+                                    }
+                                }
+                            ]
+                        }]
+                    })
+                });
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    const textResult = data.candidates[0].content.parts[0].text;
+                    postsOutput.innerHTML = `
+                        <div class="post-box">
+                            <div class="post-header">
+                                <span>📌 Skrip (${selectedPlatform} - ${selectedMood})</span>
+                                <button class="copy-btn" onclick="copyText('scriptText')">Salin Skrip</button>
+                            </div>
+                            <div class="post-content" id="scriptText">${textResult.trim()}</div>
+                        </div>
+                    `;
+                } else if (data.error) {
+                    postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="color:#f87171;">❌ Ralat API: ${data.error.message}</div></div>`;
+                } else {
+                    postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="color:#f87171;">❌ Ralat: Gagal mendapatkan respon AI.</div></div>`;
+                }
+            } catch (error) {
+                postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="color:#f87171;">❌ Ralat sistem: ${error.message}</div></div>`;
+            }
+        }
+        function copyText(elementId) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert('Berjaya salin skrip, bro!');
+            });
+        }
+    </script>
+</body>
+</html>
