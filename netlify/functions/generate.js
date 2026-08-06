@@ -17,7 +17,8 @@ exports.handler = async (event) => {
             };
         }
 
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        // Menggunakan model gemini-1.5-flash-latest yang paling stabil untuk Free Tier
+        const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
         const response = await fetch(API_URL, {
             method: 'POST',
