@@ -292,7 +292,7 @@
         </div>
     </div>
     <script>
-        const GEMINI_API_KEY = "AIzaSyD-Your-Key-Placeholder"; // Ganti dengan key yang sah jika perlu
+    
         
         let selectedPlatform = 'TikTok';
         let selectedThreadLength = '1 post (Single)';
@@ -351,88 +351,81 @@
             });
         }
         async function generateViralScript() {
-            const imageInput = document.getElementById('productImage');
-            const resultContainer = document.getElementById('resultContainer');
-            const postsOutput = document.getElementById('postsOutput');
-            if(!imageInput.files || imageInput.files.length === 0) {
-                alert('Sila upload screenshot gambar produk dulu bro!');
-                return;
-            }
-            resultContainer.style.display = 'block';
-            postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="text-align:center; color: #c084fc;">⏳ Sedang menjana skrip mengikut gaya ${selectedMood}... (~7 saat)</div></div>`;
-            try {
-                const base64Data = await convertImageToBase64(imageInput.files[0]);
-                let platformDetail = selectedPlatform;
-                if(selectedPlatform === 'Threads') {
-                    platformDetail = `Threads (panjang rantai post: ${selectedThreadLength})`;
-                }
-                let moodInstruction = "";
-                if(selectedMood.includes('Pemecah Minda')) {
-                    moodInstruction = "Gunakan teknik Shocking Hook (Ayat kontroversi ringan, terkejut, atau soalan provokasi di awal ayat untuk hentikan penonton dari skrol).";
-                } else if(selectedMood.includes('Kisah Hidup')) {
-                    moodInstruction = "Gunakan teknik Storytelling emosi (Mulakan dengan kisah benar, pengalaman peribadi, atau cerita masalah harian yang dekat dengan penonton).";
-                } else if(selectedMood.includes('Ulasan Jujur')) {
-                    moodInstruction = "Gunakan gaya Honest Review (Tampil sebagai pengguna biasa yang menceritakan kelebihan sebenar produk tanpa nampak terlalu menjual).";
-                } else if(selectedMood.includes('Penyelesaian Masalah')) {
-                    moodInstruction = "Gunakan teknik Problem-Solver (Fokus terus kepada masalah ketara pengguna dan tunjukkan bagaimana produk ini selesaikannya dengan pantas).";
-                } else if(selectedMood.includes('Desakan Segera')) {
-                    moodInstruction = "Gunakan teknik FOMO & Urgency (Tekankan promosi terhad, stok cepat habis, dan kerugian kalau lambat beli sekarang).";
-                } else {
-                    moodInstruction = "Gunakan teknik Educational Value (Berikan tips berguna atau info tersembunyi yang membuatkan penonton rasa teruja dan simpan video).";
-                }
-                let promptInstruction = `Bertindak sebagai pakar copywriter affiliate bertaraf dunia. Berdasarkan gambar produk yang dilampirkan, kenal pasti jenis produk itu dan hasilkan skrip pemasaran eksklusif untuk platform ${platformDetail} dalam bahasa ${selectedLang}. 
-                
+    const imageInput = document.getElementById('productImage');
+    const resultContainer = document.getElementById('resultContainer');
+    const postsOutput = document.getElementById('postsOutput');
+
+    if(!imageInput.files || imageInput.files.length === 0) {
+        alert('Sila upload screenshot gambar produk dulu bro!');
+        return;
+    }
+
+    resultContainer.style.display = 'block';
+    postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="text-align:center; color: #c084fc;">⏳ Sedang menjana skrip mengikut gaya ${selectedMood}... (~7 saat)</div></div>`;
+
+    try {
+        const base64Data = await convertImageToBase64(imageInput.files[0]);
+
+        let platformDetail = selectedPlatform;
+        if(selectedPlatform === 'Threads') {
+            platformDetail = `Threads (panjang rantai post: ${selectedThreadLength})`;
+        }
+
+        let moodInstruction = "";
+        if(selectedMood.includes('Pemecah Minda')) {
+            moodInstruction = "Gunakan teknik Shocking Hook (Ayat kontroversi ringan, terkejut, atau soalan provokasi di awal ayat).";
+        } else if(selectedMood.includes('Kisah Hidup')) {
+            moodInstruction = "Gunakan teknik Storytelling emosi (Mulakan dengan kisah benar, pengalaman peribadi, atau cerita masalah harian).";
+        } else if(selectedMood.includes('Ulasan Jujur')) {
+            moodInstruction = "Gunakan gaya Honest Review (Tampil sebagai pengguna biasa menceritakan kelebihan sebenar produk).";
+        } else if(selectedMood.includes('Penyelesaian Masalah')) {
+            moodInstruction = "Gunakan teknik Problem-Solver (Fokus terus kepada masalah ketara pengguna dan tunjukkan penyelesaiannya).";
+        } else if(selectedMood.includes('Desakan Segera')) {
+            moodInstruction = "Gunakan teknik FOMO & Urgency (Tekankan promosi terhad, stok cepat habis, dan kerugian kalau lambat).";
+        } else {
+            moodInstruction = "Gunakan teknik Educational Value (Tips berguna atau info tersembunyi).";
+        }
+
+        let promptInstruction = `Bertindak sebagai pakar copywriter affiliate bertaraf dunia. Berdasarkan gambar produk yang dilampirkan, kenal pasti jenis produk itu dan hasilkan skrip pemasaran eksklusif untuk platform ${platformDetail} dalam bahasa ${selectedLang}. 
+
 PENTING - STRATEGI PEMASARAN: ${moodInstruction}
+
 Sediakan skrip yang berkesan tinggi, lengkap dengan struktur ayat yang memukau dan ruang untuk letak pautan affiliate di hujung ayat.`;
-                // Menggunakan endpoint standard v1 dengan parameter key di URL query string untuk elak ralat auth header
-                const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [
-                                { text: promptInstruction },
-                                {
-                                    inline_data: {
-                                        mime_type: "image/jpeg",
-                                        data: base64Data
-                                    }
-                                }
-                            ]
-                        }]
-                    })
-                });
-                const data = await response.json();
-                
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    const textResult = data.candidates[0].content.parts[0].text;
-                    postsOutput.innerHTML = `
-                        <div class="post-box">
-                            <div class="post-header">
-                                <span>📌 Skrip (${selectedPlatform} - ${selectedMood})</span>
-                                <button class="copy-btn" onclick="copyText('scriptText')">Salin Skrip</button>
-                            </div>
-                            <div class="post-content" id="scriptText">${textResult.trim()}</div>
-                        </div>
-                    `;
-                } else if (data.error) {
-                    postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="color:#f87171;">❌ Ralat API: ${data.error.message}</div></div>`;
-                } else {
-                    postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="color:#f87171;">❌ Ralat: Gagal mendapatkan respon AI.</div></div>`;
-                }
-            } catch (error) {
-                postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="color:#f87171;">❌ Ralat sistem: ${error.message}</div></div>`;
-            }
+
+        // Panggil Netlify Function Backend
+        const response = await fetch('/.netlify/functions/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                base64Data: base64Data,
+                promptInstruction: promptInstruction
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.candidates && data.candidates[0].content.parts[0].text) {
+            const textResult = data.candidates[0].content.parts[0].text;
+            postsOutput.innerHTML = `
+                <div class="post-box">
+                    <div class="post-header">
+                        <span>📌 Skrip (${selectedPlatform} - ${selectedMood})</span>
+                        <button class="copy-btn" onclick="copyText('scriptText')">Salin Skrip</button>
+                    </div>
+                    <div class="post-content" id="scriptText">${textResult.trim()}</div>
+                </div>
+            `;
+        } else if (data.error) {
+            postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="color:#f87171;">❌ Ralat API: ${data.error.message}</div></div>`;
+        } else {
+            postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="color:#f87171;">❌ Ralat: Gagal mendapatkan respon AI.</div></div>`;
         }
-        function copyText(elementId) {
-            const textToCopy = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                alert('Berjaya salin skrip, bro!');
-            });
+
+    } catch (error) {
+        postsOutput.innerHTML = `<div class="post-box"><div class="post-content" style="color:#f87171;">❌ Ralat sistem: ${error.message}</div></div>`;
+    }
         }
+        
     </script>
 </body>
 </html>
